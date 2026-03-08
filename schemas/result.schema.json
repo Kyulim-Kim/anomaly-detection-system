@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "result.schema.json",
+  "title": "Anomaly Detection Result",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "sample_id",
+    "run_id",
+    "created_at",
+    "paths",
+    "prediction",
+    "explainability",
+    "reliability",
+    "rag",
+    "llm",
+    "evaluation",
+    "meta"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string" },
+    "sample_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "paths": {
+      "type": "object",
+      "required": ["original", "heatmap", "overlay", "result", "gt_mask", "anomaly_map_npy", "debug_dir"],
+      "additionalProperties": false,
+      "properties": {
+        "original": { "type": "string", "minLength": 1 },
+        "heatmap": { "type": "string", "minLength": 1 },
+        "overlay": { "type": "string", "minLength": 1 },
+        "result": { "type": "string", "minLength": 1 },
+        "gt_mask": { "type": ["string", "null"] },
+        "anomaly_map_npy": { "type": ["string", "null"] },
+        "debug_dir": { "type": ["string", "null"] }
+      }
+    },
+    "prediction": {
+      "type": "object",
+      "required": ["label", "score", "threshold", "score_method", "score_quantile", "task", "model"],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string",
+          "enum": ["normal", "anomaly", "uncertain"]
+        },
+        "score": { "type": "number", "minimum": 0.0 },
+        "threshold": { "type": "number", "minimum": 0.0 },
+        "probability": {
+          "type": ["number", "null"],
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Deprecated / reserved; use risk_est for empirical risk percentile. Always null."
+        },
+        "risk_est": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Empirical risk percentile (ECDF), internal/debug only; not probability of defect."
+        },
+        "score_method": {
+          "type": "string",
+          "enum": ["anomaly_map_quantile"]
+        },
+        "score_quantile": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "task": { "type": "string", "enum": ["image"] },
+        "model": {
+          "type": "object",
+          "required": ["name", "version", "framework"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string" },
+            "version": { "type": "string" },
+            "framework": { "type": "string" }
+          }
+        }
+      }
+    },
+    "explainability": {
+      "type": "object",
+      "required": ["heatmap_stats", "hotspots", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "heatmap_stats": {
+          "type": "object",
+          "required": ["min", "max", "mean", "p95"],
+          "additionalProperties": false,
+          "properties": {
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "mean": { "type": "number" },
+            "p95": { "type": "number" }
+          }
+        },
+        "hotspots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["bbox_xyxy", "score"],
+            "additionalProperties": false,
+            "properties": {
+              "bbox_xyxy": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": { "type": "integer", "minimum": 0 }
+              },
+              "score": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+            }
+          }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "reliability": {
+      "type": "object",
+      "required": ["confidence", "signals", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "signals": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["number", "boolean", "string", "null"]
+          }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "rag": {
+      "type": "object",
+      "required": ["context_used", "contexts", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "context_used": { "type": "boolean" },
+        "contexts": { "type": "array", "items": { "type": "object" } },
+        "notes": { "type": "string" }
+      }
+    },
+    "llm": {
+      "type": "object",
+      "required": ["summary", "explanation", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "summary": { "type": "string" },
+        "explanation": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "required": ["has_gt", "gt_label", "error_type"],
+      "additionalProperties": false,
+      "properties": {
+        "has_gt": { "type": "boolean" },
+        "gt_label": { "type": ["string", "null"] },
+        "error_type": {
+          "type": ["string", "null"],
+          "enum": ["TP", "FP", "TN", "FN", "NA", null]
+        }
+      }
+    },
+    "triage": {
+      "type": "object",
+      "required": ["base_label", "final_label", "reasons"],
+      "additionalProperties": false,
+      "properties": {
+        "base_label": { "type": "string", "enum": ["normal", "anomaly"] },
+        "final_label": { "type": "string", "enum": ["normal", "anomaly", "uncertain"] },
+        "reasons": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["input_filename", "input_sha1", "image_size_wh", "tags"],
+      "additionalProperties": true,
+      "properties": {
+        "input_filename": { "type": "string" },
+        "input_sha1": { "type": "string" },
+        "image_size_wh": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "defect_type": { "type": "string" }
+      }
+    }
+  }
+}

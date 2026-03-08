@@ -1,0 +1,81 @@
+# anomalib==2.3.0dev
+seed_everything: true
+trainer:
+  accelerator: gpu
+  strategy: auto
+  devices: '1'
+  num_nodes: 1
+  precision: null
+  logger: null
+  callbacks: null
+  fast_dev_run: false
+  max_epochs: 3
+  min_epochs: null
+  max_steps: -1
+  min_steps: null
+  max_time: null
+  limit_train_batches: null
+  limit_val_batches: null
+  limit_test_batches: null
+  limit_predict_batches: null
+  overfit_batches: 0.0
+  val_check_interval: null
+  check_val_every_n_epoch: 1
+  num_sanity_val_steps: null
+  log_every_n_steps: null
+  enable_checkpointing: null
+  enable_progress_bar: null
+  enable_model_summary: null
+  accumulate_grad_batches: 1
+  gradient_clip_val: null
+  gradient_clip_algorithm: null
+  deterministic: null
+  benchmark: null
+  inference_mode: true
+  use_distributed_sampler: true
+  profiler: null
+  detect_anomaly: false
+  barebones: false
+  plugins: null
+  sync_batchnorm: false
+  reload_dataloaders_every_n_epochs: 0
+  enable_autolog_hparams: true
+  model_registry: null
+optimizer: null
+lr_scheduler: null
+model:
+  class_path: anomalib.models.Patchcore
+  init_args:
+    backbone: wide_resnet50_2
+    layers:
+    - layer2
+    - layer3
+    pre_trained: true
+    coreset_sampling_ratio: 0.1
+    num_neighbors: 9
+    precision: FLOAT32
+    pre_processor: true
+    post_processor: true
+    evaluator: true
+    visualizer: true
+data:
+  class_path: anomalib.data.MVTecAD
+  init_args:
+    root: /content/datasets
+    category: bottle
+    train_batch_size: 32
+    eval_batch_size: 32
+    num_workers: 8
+    train_augmentations: null
+    val_augmentations: null
+    test_augmentations: null
+    augmentations: null
+    test_split_mode: FROM_DIR
+    test_split_ratio: 0.2
+    val_split_mode: SAME_AS_TEST
+    val_split_ratio: 0.5
+    seed: null
+logging:
+  log_graph: false
+default_root_dir: /content/outputs
+ckpt_path: null

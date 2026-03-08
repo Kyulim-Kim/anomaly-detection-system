@@ -1,0 +1,45 @@
+# Virtual env
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# Learning / heavy artifacts (not in repo)
+datasets/
+artifacts/
+
+# Assets: large/private model artifacts only
+assets/models/*.ckpt
+assets/models/*.pt
+assets/models/*.pth
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+
+# Build / temp
+*.log
+*.tmp
+
+# Local / secrets
+.env
+.env.local
+*.local
+
+# Streamlit / misc
+.streamlit/secrets.toml

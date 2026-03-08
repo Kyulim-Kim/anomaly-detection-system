@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "sample_id": "sample_123",
+  "run_id": "demo_run",
+  "created_at": "2026-01-28T00:00:00Z",
+  "paths": {
+    "original": "original.png",
+    "heatmap": "heatmap.png",
+    "overlay": "overlay.png",
+    "result": "result.json",
+    "gt_mask": null,
+    "anomaly_map_npy": "anomaly_map.npy",
+    "debug_dir": null
+  },
+  "prediction": {
+    "label": "anomaly",
+    "score": 0.83,
+    "threshold": 0.5,
+    "probability": null,
+    "risk_est": 0.97,
+    "score_method": "anomaly_map_quantile",
+    "score_quantile": 0.995,
+    "task": "image",
+    "model": {
+      "name": "patchcore",
+      "version": "2.x",
+      "framework": "anomalib"
+    }
+  },
+  "explainability": {
+    "heatmap_stats": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.21,
+      "p95": 0.74
+    },
+    "hotspots": [
+      {
+        "bbox_xyxy": [120, 80, 220, 180],
+        "score": 0.91
+      }
+    ],
+    "notes": ""
+  },
+  "reliability": {
+    "confidence": 0.62,
+    "signals": {
+      "area_ratio": 0.08,
+      "heatmap_concentration": 0.71
+    },
+    "notes": ""
+  },
+  "rag": {
+    "context_used": false,
+    "contexts": [],
+    "notes": ""
+  },
+  "llm": {
+    "summary": "",
+    "explanation": "",
+    "notes": ""
+  },
+  "evaluation": {
+    "has_gt": false,
+    "gt_label": null,
+    "error_type": "NA"
+  },
+  "triage": {
+    "base_label": "anomaly",
+    "final_label": "anomaly",
+    "reasons": []
+  },
+  "meta": {
+    "input_filename": "example.png",
+    "input_sha1": "0000000000000000000000000000000000000000",
+    "image_size_wh": [512, 512],
+    "tags": [],
+    "defect_type": "good"
+  }
+}

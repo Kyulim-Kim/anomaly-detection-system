@@ -1,0 +1,12 @@
+numpy
+scipy
+pillow
+jsonschema
+streamlit
+opencv-python
+scikit-image
+python-dotenv
+open_clip_torch
+requests
+openai
+pytest
