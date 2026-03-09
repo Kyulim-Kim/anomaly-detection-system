@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "sample_id": "002__c452bc38a5bd",
+  "run_id": "mvtec/bottle/good",
+  "created_at": "2026-03-09T05:18:14Z",
+  "paths": {
+    "original": "original.png",
+    "heatmap": "heatmap.png",
+    "overlay": "overlay.png",
+    "result": "result.json",
+    "gt_mask": null,
+    "anomaly_map_npy": "anomaly_map.npy",
+    "debug_dir": null
+  },
+  "prediction": {
+    "label": "uncertain",
+    "score": 0.3695646822452545,
+    "threshold": 0.37197692513465885,
+    "probability": null,
+    "score_method": "anomaly_map_quantile",
+    "score_quantile": 0.995,
+    "task": "image",
+    "model": {
+      "name": "patchcore",
+      "version": "2.1.0",
+      "framework": "anomalib"
+    },
+    "risk_est": 0.9904306220095693
+  },
+  "explainability": {
+    "heatmap_stats": {
+      "min": 0.0,
+      "max": 0.9999826550483704,
+      "mean": 0.18691839277744293,
+      "p95": 0.7745610475540161
+    },
+    "hotspots": [
+      {
+        "bbox_xyxy": [
+          155,
+          51,
+          218,
+          155
+        ],
+        "score": 0.8450368642807007
+      },
+      {
+        "bbox_xyxy": [
+          107,
+          192,
+          148,
+          220
+        ],
+        "score": 0.7984048128128052
+      },
+      {
+        "bbox_xyxy": [
+          158,
+          167,
+          189,
+          201
+        ],
+        "score": 0.7979270815849304
+      },
+      {
+        "bbox_xyxy": [
+          47,
+          151,
+          70,
+          173
+        ],
+        "score": 0.797490119934082
+      }
+    ],
+    "notes": "robust_norm(p_lo=50.0,p_hi=99.5), blur_sigma=2.0, dual_th(th_high=0.85,th_low=0.65), min_area=80, top_k=5"
+  },
+  "reliability": {
+    "confidence": 0.5456595013323884,
+    "signals": {
+      "score_margin": 0.002412242889404337,
+      "heatmap_concentration": 0.9824294833295292,
+      "area_ratio": 0.0716094970703125,
+      "max_intensity": 0.9999826550483704,
+      "mean_intensity": 0.18691839277744293
+    },
+    "notes": "score close to threshold"
+  },
+  "rag": {
+    "context_used": true,
+    "contexts": [
+      {
+        "chunk_id": "9fb26132560174d78e0677e97b8b23292e479646_2",
+        "doc_id": "9fb26132560174d78e0677e97b8b23292e479646",
+        "source_uri": "file://knowledge/reliability_confidence.md",
+        "title": "Reliability Confidence",
+        "snippet": "*“diffuse, hard-to-interpret patterns”*\n\nNote:\nThe concentration value is relative and implementation-dependent.\nOnly comparative interpretation within the same run or configuration is meaningful.\n\n--...",
+        "text": "*“diffuse, hard-to-interpret patterns”*\n\nNote:\nThe concentration value is relative and implementation-dependent.\nOnly comparative interpretation within the same run or configuration is meaningful.\n\n---\n\n## Interpretation guidelines\n\nThe following ranges are indicative examples; exact boundaries may vary by configuration.\n\n| Confidence range | Operational meaning |\n|-----------------|--------------------|\n| **High (> 0.8)** | Decision is stable and consistent |\n| **Medium (0.5 – 0.8)** | Borderline or ambiguous; review recommended |\n| **Low (< 0.5)** | Low-trust decision region; human review required |\n\nLow confidence decisions are intentionally paired with the **uncertain** label.\n\n---\n\n## Relationship to triage\n\nReliability confidence is **one input** to the triage layer.\n\nTypical pattern",
+        "retrieval_score": 0.357895
+      },
+      {
+        "chunk_id": "7dd7f3914ce9cffbf5843108e1abdffdaa2571d0_0",
+        "doc_id": "7dd7f3914ce9cffbf5843108e1abdffdaa2571d0",
+        "source_uri": "file://knowledge/score_and_threshold.md",
+        "title": "Score and Threshold Interpretation",
+        "snippet": "# Score and Threshold Interpretation\n\nThis document explains how the **decision score** and **threshold**\nare defined and how they should be interpreted in operation.\n\nThese values support decision-ma...",
+        "text": "# Score and Threshold Interpretation\n\nThis document explains how the **decision score** and **threshold**\nare defined and how they should be interpreted in operation.\n\nThese values support decision-making but **do not represent defect probability**.\n\n---\n\n## Decision score (anomaly score)\n\nThe decision score quantifies **how atypical a sample is**\nrelative to the normal reference data used during calibration.\n\nIt is derived from the distribution of anomaly evidence\n(e.g., anomaly map statistics), not from defect labels.\n\n### Important characteristics\n\n- The score is **not a probability**\n- A higher score means the sample deviates more from learned normal patterns\n- Scores are only comparable:\n  - within the same model\n  - under the same data distribution\n  - using the same calibration refe",
+        "retrieval_score": 0.348214
+      },
+      {
+        "chunk_id": "7dd7f3914ce9cffbf5843108e1abdffdaa2571d0_4",
+        "doc_id": "7dd7f3914ce9cffbf5843108e1abdffdaa2571d0",
+        "source_uri": "file://knowledge/score_and_threshold.md",
+        "title": "Score and Threshold Interpretation",
+        "snippet": "gh\nfor automation.\n\n---\n\n## Operational guidance\n\n- Treat the score as a **relative deviation indicator**\n- Treat the threshold as a **reference boundary**, not a hard truth\n- Always interpret score a...",
+        "text": "gh\nfor automation.\n\n---\n\n## Operational guidance\n\n- Treat the score as a **relative deviation indicator**\n- Treat the threshold as a **reference boundary**, not a hard truth\n- Always interpret score and threshold together with:\n  - reliability confidence\n  - heatmap behavior\n  - triage outcome\n\nFinal decisions should never rely on the score alone.\n\n---\n\n## Key takeaway\n\nThe decision score answers:\n\n> “How unusual is this sample compared to normal reference data?”\n\nIt does **not** answer:\n\n> “Is this a defect?”\n\nThat determination requires:\n- triage evaluation\n- visual inspection\n- human judgment",
+        "retrieval_score": 0.329114
+      },
+      {
+        "chunk_id": "07bdc512dfebbae120c5c15e62b1fe943ffaa239_0",
+        "doc_id": "07bdc512dfebbae120c5c15e62b1fe943ffaa239",
+        "source_uri": "file://knowledge/uncertain_examples.md",
+        "title": "Uncertain Decision Examples",
+        "snippet": "# Uncertain Decision Examples\n\nThis document illustrates **typical operational scenarios**\nwhere the system intentionally outputs the label **\"uncertain\"**.\n\nThese examples are not failure cases.\nThey...",
+        "text": "# Uncertain Decision Examples\n\nThis document illustrates **typical operational scenarios**\nwhere the system intentionally outputs the label **\"uncertain\"**.\n\nThese examples are not failure cases.\nThey demonstrate how the system avoids overconfident automation\nin low-trust decision regions.\n\n---\n\n## Example 1: Normal-looking Image with Borderline Score\n\n### Observed symptoms\n- Visual inspection shows no obvious defect\n- Decision score is slightly above the threshold\n- Heatmap shows weak, diffuse anomaly evidence across a wide area\n\n### System behavior\n- Base label (score vs threshold): anomaly\n- Reliability confidence: low\n- Final label after triage: uncertain\n\n### Interpretation\nThis pattern often occurs when:\n- background appearance shifts slightly,\n- illumination conditions vary,\n- or no",
+        "retrieval_score": 0.29
+      },
+      {
+        "chunk_id": "ffb90fb04da13841244809ee7317a7abb23e41d4_0",
+        "doc_id": "ffb90fb04da13841244809ee7317a7abb23e41d4",
+        "source_uri": "file://knowledge/triage_uncertain_policy.md",
+        "title": "Uncertain Triage Policy",
+        "snippet": "# Uncertain Triage Policy\n\nThis document defines the **uncertain triage policy** for the anomaly detection system.\n\nThe purpose of this policy is to explicitly handle cases where the system’s\ndecision...",
+        "text": "# Uncertain Triage Policy\n\nThis document defines the **uncertain triage policy** for the anomaly detection system.\n\nThe purpose of this policy is to explicitly handle cases where the system’s\ndecision confidence is insufficient for safe automation.\n\nUncertain is **not an error** and **not a defect decision**.\nIt is an intentional outcome designed to enforce human review.\n\n---\n\n## Two-stage decision structure\n\nThe system applies a **two-stage decision process**:\n\n### 1. Base decision (score-based)\n- **anomaly** if anomaly score ≥ threshold\n- **normal** otherwise\n\nThis decision is derived purely from the anomaly score\nrelative to the calibrated threshold.\n\n### 2. Uncertain triage override (reliability-based)\nThe base decision may be overridden and replaced with **uncertain**\nwhen the decisio",
+        "retrieval_score": 0.212389
+      }
+    ],
+    "notes": "Retrieved 5 chunks for query. docs_count=9 chunks=32 repo_root_fallback=README"
+  },
+  "llm": {
+    "summary": "- Decision: Uncertain\n- Nature: Borderline / low-trust decision\n- Action: Human review recommended (low_confidence)",
+    "explanation": "1. **Why risky** (based on Reliability Confidence, Score and Threshold Interpretation, Uncertain Decision Examples, Uncertain Triage Policy): The decision is based on a borderline margin and exhibits low confidence, indicating that the patterns observed may be diffuse and hard to interpret.\n2. **What to check** (based on Reliability Confidence, Score and Threshold Interpretation, Uncertain Decision Examples, Uncertain Triage Policy): Inspect highlighted regions in the heatmap overlay for any unusual patterns; focus on visually emphasized areas in the anomaly map to assess clarity; ensure that the lighting and focus of the imaging are optimal.\n3. **Next action** (based on Reliability Confidence, Score and Threshold Interpretation, Uncertain Decision Examples, Uncertain Triage Policy): Recommend re-capture of the sample for clearer analysis; conduct a thorough human review to confirm the findings.",
+    "notes": ""
+  },
+  "evaluation": {
+    "has_gt": false,
+    "gt_label": "good",
+    "error_type": null
+  },
+  "triage": {
+    "base_label": "normal",
+    "final_label": "uncertain",
+    "reasons": [
+      "borderline_margin",
+      "low_confidence"
+    ]
+  },
+  "meta": {
+    "input_filename": "002.png",
+    "input_sha1": "c452bc38a5bdc6ee607ba4bb0bbd57702ccbc95a",
+    "image_size_wh": [
+      900,
+      900
+    ],
+    "tags": [],
+    "debug": {
+      "raw_score_debug": 0.36860042810440063,
+      "decision_score_q": 0.995
+    },
+    "defect_type": "good"
+  }
+}

@@ -55,11 +55,11 @@ if runs:
         with st.sidebar.expander("Custom run path", expanded=False):
             run_dir_str = st.text_input("run_dir", value=run_dir_str, key="run_dir_custom")
 else:
-    run_dir_str = st.sidebar.text_input("run_dir", value="artifacts/runs", key="run_dir_custom")
+    run_dir_str = st.sidebar.text_input("run_dir", value="artifacts/demo_run", key="run_dir_custom")
 run_dir = Path(run_dir_str)
 if not run_dir.exists():
     st.warning(f"Run directory not found: {run_dir}")
-    st.info("Generate artifacts first using the CLI.")
+    st.info("No run directory was found. You can either use the bundled demo run or generate a new run with the CLI.")
     st.code(
         "python -m src.cli.run --input inputs/ --out artifacts/runs --run_id demo_run",
         language="bash",

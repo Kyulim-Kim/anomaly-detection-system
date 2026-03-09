@@ -16,9 +16,17 @@ build/
 htmlcov/
 .ipynb_checkpoints/
 
-# Learning / heavy artifacts (not in repo)
+# Datasets (not in repo)
 datasets/
-artifacts/
+
+# Pipeline outputs (large runs not committed)
+artifacts/runs/
+
+# RAG index cache
+artifacts/knowledge_index.jsonl
+
+# Keep demo artifacts for Streamlit demo
+!artifacts/demo_run/
 
 # Assets: large/private model artifacts only
 assets/models/*.ckpt

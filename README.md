@@ -2,6 +2,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.10+-blue)
 ![Streamlit](https://img.shields.io/badge/UI-Streamlit-red)
+[![Streamlit App Live Demo](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://anomaly-detection-system-fdzmlgexhzgfzh6flfpmqw.streamlit.app/)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
 A production-oriented anomaly detection system that integrates explainability, reliability estimation, and uncertainty-aware decision workflows for human-in-the-loop monitoring.

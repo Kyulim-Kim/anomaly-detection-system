@@ -17,29 +17,51 @@ def get_project_root() -> Path:
     return _PROJECT_ROOT
 
 
-def discover_runs(root: str = "artifacts/runs") -> List[Dict[str, str]]:
-    """Discover runs by scanning for run_meta.json under root. Returns [{display, run_dir}, ...]."""
-    base = _PROJECT_ROOT / root
-    if not base.exists():
-        return []
+def discover_runs(roots: Optional[List[str]] = None) -> List[Dict[str, str]]:
+    """Discover runs by scanning for run_meta.json under known artifact roots.
+    Returns [{display, run_dir}, ...].
+    """
+    if roots is None:
+        roots = ["artifacts/demo_run", "artifacts/runs"]
+
     out: List[Dict[str, str]] = []
-    for meta_path in sorted(base.rglob("run_meta.json")):
-        run_dir_path = meta_path.parent
-        run_dir_str = str(run_dir_path)
-        display = run_dir_str
-        try:
-            with meta_path.open("r", encoding="utf-8") as f:
-                meta = json.load(f)
-            if isinstance(meta.get("run_id"), str):
-                display = meta["run_id"].strip() or display
-        except Exception:
-            pass
-        if not display or display == run_dir_str:
+    seen: set[str] = set()
+
+    for root in roots:
+        base = _PROJECT_ROOT / root
+        if not base.exists():
+            continue
+
+        meta_paths: List[Path] = []
+        if (base / "run_meta.json").exists():
+            meta_paths.append(base / "run_meta.json")
+        meta_paths.extend(sorted(base.rglob("run_meta.json")))
+
+        for meta_path in meta_paths:
+            run_dir_path = meta_path.parent
+            run_dir_str = str(run_dir_path)
+
+            if run_dir_str in seen:
+                continue
+            seen.add(run_dir_str)
+
+            display = run_dir_str
             try:
-                display = str(run_dir_path.relative_to(_PROJECT_ROOT))
-            except ValueError:
-                display = run_dir_path.name
-        out.append({"display": display, "run_dir": run_dir_str})
+                with meta_path.open("r", encoding="utf-8") as f:
+                    meta = json.load(f)
+                if isinstance(meta.get("run_id"), str):
+                    display = meta["run_id"].strip() or display
+            except Exception:
+                pass
+
+            if not display or display == run_dir_str:
+                try:
+                    display = str(run_dir_path.relative_to(_PROJECT_ROOT))
+                except ValueError:
+                    display = run_dir_path.name
+
+            out.append({"display": display, "run_dir": run_dir_str})
+
     return out
 
 
